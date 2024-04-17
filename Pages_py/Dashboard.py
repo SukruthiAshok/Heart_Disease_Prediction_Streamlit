@@ -1,8 +1,12 @@
 import streamlit as st
+from PIL import Image
 from streamlit_option_menu import option_menu
 import Predict as p
 import login as log
-st.set_page_config(page_title="HRUDAY",layout="wide")
+import Home as h
+
+im = Image.open("favicon.ico")
+st.set_page_config(page_title="HRUDAY",page_icon=im,layout="wide")
 
 with st.sidebar:
     selected=option_menu(
@@ -15,7 +19,8 @@ with st.sidebar:
 if selected=="Account":
     log.main()
 if selected=="Home":
-    st.title(f"{selected}")
+    # st.title(f"{selected}")
+    h.home()
 if selected=="Predict":
     p.main()
 if selected=="History":

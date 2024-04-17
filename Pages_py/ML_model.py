@@ -48,34 +48,34 @@ joblib.dump(ensemble, "ensemble_model.pkl")
 # Load the trained ensemble model
 ensemble_model = joblib.load("ensemble_model.pkl")
 
-# Evaluate the performance of the model
-accuracy = accuracy_score(y_test, ensemble_model.predict(X_test))
-precision = precision_score(y_test, ensemble_model.predict(X_test), average='weighted')
-recall = recall_score(y_test, ensemble_model.predict(X_test), average='weighted')
-f1 = f1_score(y_test, ensemble_model.predict(X_test), average='weighted')
+# # Evaluate the performance of the model
+# accuracy = accuracy_score(y_test, ensemble_model.predict(X_test))
+# precision = precision_score(y_test, ensemble_model.predict(X_test), average='weighted')
+# recall = recall_score(y_test, ensemble_model.predict(X_test), average='weighted')
+# f1 = f1_score(y_test, ensemble_model.predict(X_test), average='weighted')
 
-# Display the evaluation metrics
-print("Evaluation Metrics:")
-print("Accuracy:", accuracy)
-print("Precision:", precision)
-print("Recall:", recall)
-print("F1-score:", f1)
+# # Display the evaluation metrics
+# print("Evaluation Metrics:")
+# print("Accuracy:", accuracy)
+# print("Precision:", precision)
+# print("Recall:", recall)
+# print("F1-score:", f1)
 
-# Perform validation
-val_accuracy = accuracy_score(y_val, ensemble_model.predict(X_val))
-print("Validation Accuracy:", val_accuracy)
+# # Perform validation
+# val_accuracy = accuracy_score(y_val, ensemble_model.predict(X_val))
+# print("Validation Accuracy:", val_accuracy)
 
-# Perform cross-validation
-cv_scores = cross_val_score(ensemble_model, X_train, y_train, cv=5)  # 5-fold cross-validation
-print("Cross-Validation Scores:", cv_scores)
-print("Mean CV Accuracy:", np.mean(cv_scores))
+# # Perform cross-validation
+# cv_scores = cross_val_score(ensemble_model, X_train, y_train, cv=5)  # 5-fold cross-validation
+# print("Cross-Validation Scores:", cv_scores)
+# print("Mean CV Accuracy:", np.mean(cv_scores))
 
-# Evaluate the performance of the model on the training data
-train_accuracy = accuracy_score(y_train, ensemble_model.predict(X_train))
+# # Evaluate the performance of the model on the training data
+# train_accuracy = accuracy_score(y_train, ensemble_model.predict(X_train))
 
-# Evaluate the performance of the model on the test data
-test_accuracy = accuracy_score(y_test, ensemble_model.predict(X_test))
+# # Evaluate the performance of the model on the test data
+# test_accuracy = accuracy_score(y_test, ensemble_model.predict(X_test))
 
-# Display the accuracy scores
-print("Training Accuracy:", train_accuracy)
-print("Testing Accuracy:", test_accuracy)
+# # Display the accuracy scores
+# print("Training Accuracy:", train_accuracy)
+# print("Testing Accuracy:", test_accuracy)
