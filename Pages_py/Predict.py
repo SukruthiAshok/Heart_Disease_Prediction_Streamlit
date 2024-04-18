@@ -66,7 +66,7 @@ def load_scaler():
         scaler = joblib.load(scaler_file)
     return scaler
 
-def main():
+def predict():
     st.title("Heart Disease Prediction")
     st.write("Please provide the following information:")
 
@@ -99,5 +99,5 @@ def main():
         else:
             st.write("Prediction: Positive (Heart Disease Detected)")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

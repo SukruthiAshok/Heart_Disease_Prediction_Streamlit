@@ -5,7 +5,7 @@ from streamlit_option_menu import option_menu
 
 from st_pages import hide_pages
 # st.set_page_config(page_title="HRUDAY",layout="wide")
-def main():
+def login():
     # st.title("Hruday")
     
     selected = option_menu(
@@ -55,8 +55,8 @@ def validate_login(username, password):
     # For simplicity, always return True in this example
     return True
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
 
 

@@ -17,11 +17,11 @@ with st.sidebar:
     )
 
 if selected=="Account":
-    log.main()
+    log.login()
 if selected=="Home":
     # st.title(f"{selected}")
     h.home()
 if selected=="Predict":
-    p.main()
+    p.predict()
 if selected=="History":
     st.title(f"{selected}")        
