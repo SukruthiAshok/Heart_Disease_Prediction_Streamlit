@@ -2,9 +2,23 @@ import streamlit as st
 import pandas as pd
 import Dashboard as d
 from streamlit_option_menu import option_menu
+from table_model import cursor, connection
+import bcrypt
+from session_state import SessionState
 
-from st_pages import hide_pages
+#from st_pages import hide_pages
 # st.set_page_config(page_title="HRUDAY",layout="wide")
+def hash_password(password):
+    # Generate a salt and hash the password
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password
+
+def verify_password(plain_password, hashed_password):
+    # Check if the plain password matches the hashed password
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password)
+
+
 def login():
     # st.title("Hruday")
     
@@ -29,11 +43,15 @@ def login_page():
             if user_name == "" or pwd == "":
                 st.error("Username and password cannot be empty!")
             else:
-                    st.success("You have successfully logged in")
-                    st.session_state["logged_in"] = True
-                    hide_pages([])
-                    st.success("Logged in!")
-                    st.switch_page("Pages_py/Dashboard.py")
+                    if validate_login(user_name, pwd):
+                        # Create or retrieve session state
+                        session_state = SessionState.get()
+                        # Populate session state with user details
+                        session_state.username = user_name
+                        session_state.password = pwd
+                        st.success("You have successfully logged in")
+                    else:
+                        st.error("Invalid username or password!")
 		
 
 def register_page():
@@ -42,6 +60,7 @@ def register_page():
         new_user = st.text_input("Username")
         new_email = st.text_input("E-mail")
         new_password = st.text_input("Password", type='password')
+        hashPass = hash_password(new_password)
         submitted = st.form_submit_button("Register")
         if submitted:
             if new_user == "" or new_email == "" or new_password == "":
@@ -49,11 +68,25 @@ def register_page():
             else:
                 # Register new user logic
                 st.success("You have successfully created an Account")
+        data = (new_user, new_email, hashPass)
+        sql = "INSERT INTO user values(%s,%s,%s)"
+        cursor.execute(sql,data)
+        connection.commit()
+        
  
 def validate_login(username, password):
-    # Add your login validation logic here
-    # For simplicity, always return True in this example
-    return True
+    # Query the database to retrieve the hashed password for the provided username
+    sql = "SELECT password FROM user WHERE username = %s"
+    cursor.execute(sql, (username,))
+    result = cursor.fetchone()
+
+    if result:
+        hashed_password = result[0]  # Extract the hashed password from the result
+        # Verify the provided password against the hashed password using your existing function
+        if verify_password(password, hashed_password):
+            return True  # Return True if the passwords match
+    return False  # Return False if no matching user or password mismatch
+
 
 # if __name__ == '__main__':
 #     main()
