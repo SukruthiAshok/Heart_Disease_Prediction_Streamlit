@@ -6,7 +6,7 @@ from table_model import cursor, connection
 import bcrypt
 from session_state import SessionState
 
-#from st_pages import hide_pages
+##from st_pages import hide_pages
 # st.set_page_config(page_title="HRUDAY",layout="wide")
 def hash_password(password):
     # Generate a salt and hash the password
