@@ -17,12 +17,15 @@ class SessionState:
         else:
             self.userid = None
 
-    @staticmethod
-    def get(username=None, password=None):
-        """Gets a SessionState object for the current session. Creates one if it doesn't exist."""
-        if 'session' not in st.session_state:
-            st.session_state.session = SessionState(username, password)
-        else:
-            st.session_state.session.username = username
-            st.session_state.session.password = password
-        return st.session_state.session
+    def return_userid(self):
+        return self.userid
+
+    # @staticmethod
+    # def get(username=None, password=None):
+    #     """Gets a SessionState object for the current session. Creates one if it doesn't exist."""
+    #     if 'session' not in st.session_state:
+    #         st.session_state.session = SessionState(username, password)
+    #     else:
+    #         st.session_state.session.username = username
+    #         st.session_state.session.password = password
+    #     return st.session_state.session

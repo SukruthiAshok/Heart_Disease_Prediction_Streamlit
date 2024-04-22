@@ -54,9 +54,9 @@ import streamlit as st
 import joblib
 import numpy as np
 import datetime
-from session_state import SessionState
 from table_model import cursor, connection
 
+user_id = None
 def load_model():
     # Load the trained model
     with open('ensemble_model.pkl', 'rb') as model_file:
@@ -73,29 +73,33 @@ def insert_user_data(userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach
     # Get current timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # Insert data into the user_data table
-    sql = "INSERT INTO user_data (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %f, %d, %d, %d, %d, %s)"
+    sql = "INSERT INTO user_data (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     data = (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp)
     cursor.execute(sql, data)
     connection.commit()
+
+def process_data(userid):
+    global user_id
+    user_id = userid    
 
 def predict():
     st.title("Heart Disease Prediction")
     st.write("Please provide the following information:")
 
-    age = st.number_input("Age")
-    sex = st.number_input("Sex (Male=1, Female=0)")
-    cp = st.number_input("Chest Pain Type (0-3)")
-    trestbps = st.number_input("Resting Blood Pressure (mm Hg)")
-    chol = st.number_input("Cholesterol (mg/dl)")
-    fbs = st.number_input("Fasting Blood Sugar (> 120 mg/dl)")
-    restecg = st.number_input("Resting Electrocardiographic Results (0-2)")
-    thalach = st.number_input("Maximum Heart Rate Achieved")
-    exang = st.number_input("Exercise Induced Angina (1=yes, 0=no)")
-    oldpeak = st.number_input("ST Depression Induced by Exercise")
-    slope = st.number_input("Slope of the Peak Exercise ST Segment (0-2)")
-    ca = st.number_input("Number of Major Vessels Colored by Flourosopy (0-3)")
-    thal = st.number_input("Thalassemia (0-3)")
-    prediction=0
+    age = int(st.number_input("Age"))
+    sex = int(st.number_input("Sex (Male=1, Female=0)"))
+    cp = int(st.number_input("Chest Pain Type (0-3)"))
+    trestbps = int(st.number_input("Resting Blood Pressure (mm Hg)"))
+    chol = int(st.number_input("Cholesterol (mg/dl)"))
+    fbs = int(st.number_input("Fasting Blood Sugar (> 120 mg/dl)"))
+    restecg = int(st.number_input("Resting Electrocardiographic Results (0-2)"))
+    thalach = int(st.number_input("Maximum Heart Rate Achieved"))
+    exang = int(st.number_input("Exercise Induced Angina (1=yes, 0=no)"))
+    oldpeak = int(st.number_input("ST Depression Induced by Exercise"))
+    slope = int(st.number_input("Slope of the Peak Exercise ST Segment (0-2)"))
+    ca = int(st.number_input("Number of Major Vessels Colored by Flourosopy (0-3)"))
+    thal = int(st.number_input("Thalassemia (0-3)"))
+    prediction = 0
 
     predict_btn= st.button("Predict")
     if predict_btn:
@@ -112,8 +116,7 @@ def predict():
         else:
             st.write("Prediction: Positive (Heart Disease Detected)")
 
-        session_state = SessionState.get()
-        userid = session_state.userid
-        insert_user_data(userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, prediction[0])
+        print("Userid",user_id)
+        insert_user_data(user_id, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, int(prediction[0]))
 # if __name__ == "__main__":
 #     main()
