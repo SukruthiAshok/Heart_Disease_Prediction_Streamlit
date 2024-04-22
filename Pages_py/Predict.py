@@ -53,6 +53,8 @@
 import streamlit as st
 import joblib
 import numpy as np
+import datetime
+from session_state import SessionState
 
 def load_model():
     # Load the trained model
@@ -65,6 +67,15 @@ def load_scaler():
     with open('scaler.pkl', 'rb') as scaler_file:
         scaler = joblib.load(scaler_file)
     return scaler
+
+def insert_user_data(userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target):
+    # Get current timestamp
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Insert data into the user_data table
+    sql = "INSERT INTO user_data (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    data = (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp)
+    cursor.execute(sql, data)
+    connection.commit()
 
 def predict():
     st.title("Heart Disease Prediction")
@@ -83,6 +94,7 @@ def predict():
     slope = st.text_input("Slope of the Peak Exercise ST Segment (0-2)")
     ca = st.text_input("Number of Major Vessels Colored by Flourosopy (0-3)")
     thal = st.text_input("Thalassemia (0-3)")
+    prediction=0
 
     predict_btn= st.button("Predict")
     if predict_btn:
@@ -99,5 +111,8 @@ def predict():
         else:
             st.write("Prediction: Positive (Heart Disease Detected)")
 
+        session_state = SessionState.get()
+        userid = session_state.userid
+        insert_user_data(userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, prediction[0])
 # if __name__ == "__main__":
 #     main()

@@ -6,3 +6,11 @@ connection = mysql.connector.connect(
     host=con.MYSQL_DATABASE_HOST,
     database=con.MYSQL_DATABASE_DB
 )
+
+cursor= connection.cursor()
+
+#cursor.execute("SELECT * FROM user")
+#data=cursor.fetchall()
+#for x in data:
+ # print(x)
+
