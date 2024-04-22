@@ -3,7 +3,7 @@ import pandas as pd
 import Dashboard as d
 from streamlit_option_menu import option_menu
 
-from st_pages import hide_pages
+# from st_pages import hide_pages
 # st.set_page_config(page_title="HRUDAY",layout="wide")
 def login():
     # st.title("Hruday")
@@ -30,10 +30,6 @@ def login_page():
                 st.error("Username and password cannot be empty!")
             else:
                     st.success("You have successfully logged in")
-                    st.session_state["logged_in"] = True
-                    hide_pages([])
-                    st.success("Logged in!")
-                    st.switch_page("Pages_py/Dashboard.py")
 		
 
 def register_page():
