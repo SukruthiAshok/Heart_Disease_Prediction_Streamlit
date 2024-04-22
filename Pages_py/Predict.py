@@ -55,6 +55,7 @@ import joblib
 import numpy as np
 import datetime
 from session_state import SessionState
+from table_model import cursor, connection
 
 def load_model():
     # Load the trained model
@@ -72,7 +73,7 @@ def insert_user_data(userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach
     # Get current timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # Insert data into the user_data table
-    sql = "INSERT INTO user_data (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sql = "INSERT INTO user_data (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %f, %d, %d, %d, %d, %s)"
     data = (userid, age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target, timestamp)
     cursor.execute(sql, data)
     connection.commit()
@@ -81,19 +82,19 @@ def predict():
     st.title("Heart Disease Prediction")
     st.write("Please provide the following information:")
 
-    age = st.text_input("Age")
-    sex = st.text_input("Sex (Male=1, Female=0)")
-    cp = st.text_input("Chest Pain Type (0-3)")
-    trestbps = st.text_input("Resting Blood Pressure (mm Hg)")
-    chol = st.text_input("Cholesterol (mg/dl)")
-    fbs = st.text_input("Fasting Blood Sugar (> 120 mg/dl)")
-    restecg = st.text_input("Resting Electrocardiographic Results (0-2)")
-    thalach = st.text_input("Maximum Heart Rate Achieved")
-    exang = st.text_input("Exercise Induced Angina (1=yes, 0=no)")
-    oldpeak = st.text_input("ST Depression Induced by Exercise")
-    slope = st.text_input("Slope of the Peak Exercise ST Segment (0-2)")
-    ca = st.text_input("Number of Major Vessels Colored by Flourosopy (0-3)")
-    thal = st.text_input("Thalassemia (0-3)")
+    age = st.number_input("Age")
+    sex = st.number_input("Sex (Male=1, Female=0)")
+    cp = st.number_input("Chest Pain Type (0-3)")
+    trestbps = st.number_input("Resting Blood Pressure (mm Hg)")
+    chol = st.number_input("Cholesterol (mg/dl)")
+    fbs = st.number_input("Fasting Blood Sugar (> 120 mg/dl)")
+    restecg = st.number_input("Resting Electrocardiographic Results (0-2)")
+    thalach = st.number_input("Maximum Heart Rate Achieved")
+    exang = st.number_input("Exercise Induced Angina (1=yes, 0=no)")
+    oldpeak = st.number_input("ST Depression Induced by Exercise")
+    slope = st.number_input("Slope of the Peak Exercise ST Segment (0-2)")
+    ca = st.number_input("Number of Major Vessels Colored by Flourosopy (0-3)")
+    thal = st.number_input("Thalassemia (0-3)")
     prediction=0
 
     predict_btn= st.button("Predict")
