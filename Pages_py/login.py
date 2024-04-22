@@ -16,7 +16,7 @@ def hash_password(password):
 
 def verify_password(plain_password, hashed_password):
     # Check if the plain password matches the hashed password
-    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password)
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
 def login():
@@ -68,10 +68,10 @@ def register_page():
             else:
                 # Register new user logic
                 st.success("You have successfully created an Account")
-        data = (new_user, new_email, hashPass)
-        sql = "INSERT INTO user values(%s,%s,%s)"
-        cursor.execute(sql,data)
-        connection.commit()
+                data = (new_user, new_email, hashPass)
+                sql = "INSERT INTO user (username, email, password) VALUES (%s,%s,%s)"
+                cursor.execute(sql,data)
+                connection.commit()
         
  
 def validate_login(username, password):
