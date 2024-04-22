@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import Dashboard as d
 from streamlit_option_menu import option_menu
 from table_model import cursor, connection
 import bcrypt
