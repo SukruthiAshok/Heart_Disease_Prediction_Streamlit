@@ -48,6 +48,7 @@ def login_page():
                         sessionState = SessionState(username=user_name,password=pwd)
                         user_id = sessionState.return_userid()
                         Predict.process_data(user_id)
+                        d.process_data(user_id)
                         st.success("You have successfully logged in")
                     else:
                         st.error("Invalid username or password!")
