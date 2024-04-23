@@ -10,7 +10,8 @@ connection = mysql.connector.connect(
 
 cursor= connection.cursor()
 
-cursor.execute("SELECT * FROM user")
-data=cursor.fetchall()
-for x in data:
-  print(x)
+#cursor.execute("SELECT * FROM user")
+#data=cursor.fetchall()
+#for x in data:
+ # print(x)
+
