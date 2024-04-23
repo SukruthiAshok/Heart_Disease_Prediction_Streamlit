@@ -20,6 +20,9 @@ class SessionState:
     def return_userid(self):
         return self.userid
 
+    def logout(self):
+        self.userid = None
+
     # @staticmethod
     # def get(username=None, password=None):
     #     """Gets a SessionState object for the current session. Creates one if it doesn't exist."""

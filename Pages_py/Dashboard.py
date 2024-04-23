@@ -8,7 +8,6 @@ import History as his
 
 im = Image.open("favicon.ico")
 st.set_page_config(page_title="HRUDAY",page_icon=im,layout="wide")
-
 with st.sidebar:
     selected=option_menu(
         menu_title="Menu",
