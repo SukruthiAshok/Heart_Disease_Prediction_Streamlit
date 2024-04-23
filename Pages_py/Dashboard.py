@@ -4,6 +4,7 @@ from streamlit_option_menu import option_menu
 import Predict as p
 import login as log
 import Home as h
+import History as his
 
 im = Image.open("favicon.ico")
 st.set_page_config(page_title="HRUDAY",page_icon=im,layout="wide")
@@ -24,4 +25,6 @@ if selected=="Home":
 if selected=="Predict":
     p.predict()
 if selected=="History":
-    st.title(f"{selected}")        
+    his.history()
+if selected=="Logout":
+    st.write("Logged out Successfully!!!") 
