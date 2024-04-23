@@ -1,11 +1,12 @@
 import streamlit as st
 import pandas as pd
-import Dashboard as d
+
 from streamlit_option_menu import option_menu
 from table_model import cursor, connection
 import bcrypt
 from session_state import SessionState
 import Predict
+import History
 
 ##from st_pages import hide_pages
 # st.set_page_config(page_title="HRUDAY",layout="wide")
@@ -49,7 +50,11 @@ def login_page():
                         sessionState = SessionState(username=user_name,password=pwd)
                         user_id = sessionState.return_userid()
                         Predict.process_data(user_id)
+<<<<<<< HEAD
                         d.process_data(user_id)
+=======
+                        History.process_data(user_id)
+>>>>>>> 6a732878397b904784763a345620d46108e8f217
                         st.success("You have successfully logged in")
                     else:
                         st.error("Invalid username or password!")
