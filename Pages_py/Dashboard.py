@@ -8,7 +8,6 @@ import History as his
 
 im = Image.open("favicon.ico")
 st.set_page_config(page_title="HRUDAY",page_icon=im,layout="wide")
-user_id = None
 with st.sidebar:
     selected=option_menu(
         menu_title="Menu",
@@ -16,9 +15,6 @@ with st.sidebar:
         icons=["box-arrow-in-right","house-fill","activity","clock-history","box-arrow-right"],
         default_index=0,
     )
-def process_data(user_id):
-    global user_id
-    user_id = userid
 
 if selected=="Account":
     log.login()
