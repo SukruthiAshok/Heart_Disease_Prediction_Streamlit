@@ -5,6 +5,7 @@ from streamlit_option_menu import option_menu
 from table_model import cursor, connection
 import bcrypt
 from session_state import SessionState
+import Predict
 
 ##from st_pages import hide_pages
 # st.set_page_config(page_title="HRUDAY",layout="wide")
@@ -45,14 +46,13 @@ def login_page():
             else:
                     if validate_login(user_name, pwd):
                         # Create or retrieve session state
-                        session_state = SessionState.get()
-                        # Populate session state with user details
-                        session_state.username = user_name
-                        session_state.password = pwd
+                        sessionState = SessionState(username=user_name,password=pwd)
+                        user_id = sessionState.return_userid()
+                        Predict.process_data(user_id)
                         st.success("You have successfully logged in")
                     else:
                         st.error("Invalid username or password!")
-		
+
 
 def register_page():
     with st.form("register_form", clear_on_submit=True):
