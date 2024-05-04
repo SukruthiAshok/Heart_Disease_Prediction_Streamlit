@@ -5,7 +5,6 @@ connection = mysql.connector.connect(
     password=con.MYSQL_DATABASE_PASSWORD,
     host=con.MYSQL_DATABASE_HOST,
     database=con.MYSQL_DATABASE_DB,
-    port=3308
 )
 
 cursor= connection.cursor()
