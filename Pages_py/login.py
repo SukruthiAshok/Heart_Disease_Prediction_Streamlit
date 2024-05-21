@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-
+import re
 from streamlit_option_menu import option_menu
 from table_model import cursor, connection
 import bcrypt
@@ -8,8 +8,7 @@ from session_state import SessionState
 import Predict
 import History
 
-##from st_pages import hide_pages
-# st.set_page_config(page_title="HRUDAY",layout="wide")
+
 def hash_password(password):
     # Generate a salt and hash the password
     salt = bcrypt.gensalt()
@@ -55,6 +54,22 @@ def login_page():
                     else:
                         st.error("Invalid username or password!")
 
+def is_valid_email(email):
+    regex = r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    return re.match(regex, email)
+
+def is_valid_password(password):
+    if len(password) < 8:
+        return False, "Password must be at least 8 characters long"
+    if not re.search(r'[A-Z]', password):
+        return False, "Password must contain at least one uppercase letter"
+    if not re.search(r'[a-z]', password):
+        return False, "Password must contain at least one lowercase letter"
+    if not re.search(r'[0-9]', password):
+        return False, "Password must contain at least one digit"
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return False, "Password must contain at least one special character"
+    return True, ""
 
 def register_page():
     with st.form("register_form", clear_on_submit=True):
@@ -65,15 +80,20 @@ def register_page():
         hashPass = hash_password(new_password)
         submitted = st.form_submit_button("Register")
         if submitted:
-            if new_user == "" or new_email == "" or new_password == "":
-                st.error("Fields cannot be empty!")
+            if not new_user or not new_email or not new_password:
+                st.error("Please fill out all fields")
+            elif not is_valid_email(new_email):
+                st.error("Please enter a valid email address")
             else:
-                # Register new user logic
-                st.success("You have successfully created an Account")
-                data = (new_user, new_email, hashPass)
-                sql = "INSERT INTO user (username, email, password) VALUES (%s,%s,%s)"
-                cursor.execute(sql,data)
-                connection.commit()
+                is_valid, message = is_valid_password(new_password)
+                if not is_valid:
+                    st.error(message)
+                else:
+                    st.success("You have successfully created an Account")
+                    data = (new_user, new_email, hashPass)
+                    sql = "INSERT INTO user (username, email, password) VALUES (%s,%s,%s)"
+                    cursor.execute(sql,data)
+                    connection.commit()
         
  
 def validate_login(username, password):
@@ -88,99 +108,3 @@ def validate_login(username, password):
         if verify_password(password, hashed_password):
             return True  # Return True if the passwords match
     return False  # Return False if no matching user or password mismatch
-
-
-# if __name__ == '__main__':
-#     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Security
-#passlib,hashlib,bcrypt,scrypt
-# import hashlib
-# def make_hashes(password):
-# 	return hashlib.sha256(str.encode(password)).hexdigest()
-
-# def check_hashes(password,hashed_text):
-# 	if make_hashes(password) == hashed_text:
-# 		return hashed_text
-# 	return False
-# # DB Management
-# import sqlite3 
-# conn = sqlite3.connect('heartdp.db')
-# c = conn.cursor()
-# # DB  Functions
-# def create_usertable():
-# 	c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT)')
-
-
-# def add_userdata(username,password):
-# 	c.execute('INSERT INTO userstable(username,password) VALUES (?,?)',(username,password))
-# 	conn.commit()
-
-# def login_user(username,password):
-# 	c.execute('SELECT * FROM userstable WHERE username =? AND password = ?',(username,password))
-# 	data = c.fetchall()
-# 	return data
-
-
-# def view_all_users():
-# 	c.execute('SELECT * FROM userstable')
-# 	data = c.fetchall()
-# 	return data
-
-# menu = ["Home","Login","SignUp"]
-# choice = st.sidebar.selectbox("Menu",menu)
-
-# if choice == "Home":
-# 	st.subheader("Home")
-
-# elif choice == "Login":
-	
-# 	st.sidebar.subheader("Login Section")
-# 	username = st.sidebar.text_input("User Name")
-# 	password = st.sidebar.text_input("Password",type='password')
-# 	if st.sidebar.checkbox(label="Login"):
-# 		# if password == '12345':
-# 		create_usertable()
-# 		hashed_pswd = make_hashes(password)
-
-# 		result = login_user(username,check_hashes(password,hashed_pswd))
-# 		if result:
-# 			st.sidebar.success("Logged In as {}".format(username))
-# 			if result:
-# 				d.dashboard()
-
-# 		else:
-# 			st.warning("Incorrect Username/Password")
-
-# elif choice == "SignUp":
-# 	st.subheader("Create New Account")
-# 	new_user = st.text_input("Username")
-# 	new_password = st.text_input("Password",type='password')
-
-# 	if st.button("Signup"):
-# 		create_usertable()
-# 		add_userdata(new_user,make_hashes(new_password))
-# 		st.success("You have successfully created a valid Account")
-# 		st.info("Go to Login Menu to login")
